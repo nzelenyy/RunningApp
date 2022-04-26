@@ -33,10 +33,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TimeStepCounter.class);
         //RunRecord old_run = RunRecord(Integer.valueOf(height.getText()));
         RunRecord old_run = new RunRecord();
-        ArrayList old_run_to_send = old_run.GetArrayList();
-        intent.putExtra("old_run", old_run_to_send);
-        intent.putExtra("height", height.getText().toString()); // передаем введенный рост
-        //intent.putExtra("zero_dist", zeroDist); //передаем массив с нулями
+        intent.putExtra("old_run", old_run);
+        if(height.getText().length()<2) intent.putExtra("height", 175);
+        else intent.putExtra("height", Integer.valueOf(height.getText().toString()));
         startActivity(intent);
     }
 }
