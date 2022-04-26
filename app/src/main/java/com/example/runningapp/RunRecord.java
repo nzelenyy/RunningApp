@@ -1,14 +1,11 @@
 package com.example.runningapp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-/*
- рост, старый забег,
-*/
 
-public class RunRecord extends TimeStepCounter {
-    private int _height;
-    private ArrayList _records;
+public class RunRecord extends TimeStepCounter implements Serializable {
+    private int _height;private ArrayList _records;
     private int _ticks_amount;
     private int _current_steps_amount;
     private int _current_run_steps_amount;
@@ -42,8 +39,6 @@ public class RunRecord extends TimeStepCounter {
         _current_steps_amount = 0;
         _ticks_amount = 0;
     }
-
-    ;
 
     boolean AddRunStep(int new_time) {
         while(_ticks_amount< new_time+1)
@@ -91,5 +86,9 @@ public class RunRecord extends TimeStepCounter {
     int GetHeight()
     {
         return _height;
+    }
+
+    int GetTicksAmount(){
+        return _ticks_amount;
     }
 }

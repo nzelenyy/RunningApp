@@ -52,17 +52,18 @@ public class TimeStepCounter extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_step_counter);
 
-        String stringHeight = getIntent().getStringExtra("height"); // считали рост
+        int height = getIntent().getIntExtra("height", 170);// считали рост
 
-        currentRun = new RunRecord(Integer.parseInt(stringHeight));
+        currentRun = new RunRecord(height);
         //zeroStep = ((double)height)/400 + 0.37; // посчитали "нулевой шаг
         // Вынести все ниже в 1 структуру в качестве аргумента, в creator написать заполнение нулями, удалить 50-53
-        ArrayList old_run_data = getIntent().getParcelableExtra("old_run");
-        if (old_run_data==null)
-        {
-            prevRun = new RunRecord();
-        }
-        else prevRun = new RunRecord(old_run_data);
+        //ArrayList old_run_data = getIntent().getParcelableExtra("old_run_array");
+        //if (old_run_data==null)
+        //{
+            //prevRun = new RunRecord();
+        //}
+        //else prevRun = new RunRecord(old_run_data);
+        prevRun = (RunRecord) getIntent().getSerializableExtra("old_run");
         //double[] compDist = getIntent().getDoubleArrayExtra("comp_dist"); // считали массив, с которым будем сорвеноваться из FirstResults
         //if (compDist != null) // если этот массив не null (то есть мы перешли из FirstResults, a не из MainActivity), то соревнуемся с ним
         //{
@@ -95,7 +96,7 @@ public class TimeStepCounter extends AppCompatActivity{
             constraintLayout.addView(N_Pr);
             pb_Array.add(N_Pr);
         }
-
+        Diff.setText(currentRun.GetHeight()+"");
         // шагомер:
         SensorEventListener stepDetector = new SensorEventListener() {
             @Override
@@ -175,10 +176,7 @@ public class TimeStepCounter extends AppCompatActivity{
         running = false;
 
         Intent intent = new Intent(this, FirstResults.class);
-        //intent.putExtra("steps", Integer.toString((stepCount - 1))); // передаем количество шагов
-        //intent.putExtra("seconds", Integer.toString((int) seconds)); // передаем количество секунд
-        //intent.putExtra("dist", Dist); // передаем массив расстояний
-        //intent.putExtra("height2", height); // передаем рост
+        intent.putExtra("old_run", currentRun);
         startActivity(intent); // переходим в FirstResults
     }
 

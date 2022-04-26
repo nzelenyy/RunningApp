@@ -9,47 +9,38 @@ import android.widget.TextView;
 
 public class FirstResults extends AppCompatActivity {
 
-    private TextView textDistance;
-    private TextView textSteps;
-    private TextView textTime;
 
-    private double[] Dist;
-
-    private String stringSeconds;
-    private int height;
-    private String stringHeight;
-
+    private RunRecord old_run;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_results);
 
-        textDistance = (TextView) findViewById(R.id.textDistance);
-        textSteps = (TextView) findViewById(R.id.textSteps);
-        textTime = (TextView) findViewById(R.id.textTime);
+        TextView textDistance;
+        TextView textSteps;
+        TextView textTime;
 
-        Dist = getIntent().getDoubleArrayExtra("dist");
 
-        stringSeconds = getIntent().getStringExtra("seconds");
+        textDistance = findViewById(R.id.textDistance);
+        textSteps =  findViewById(R.id.textSteps);
+        textTime = findViewById(R.id.textTime);
 
-        for (int i = Integer.parseInt(stringSeconds)+1; i < Dist.length; i++)
-        {
-            Dist[i] = Dist[Integer.parseInt(stringSeconds)];
-        }
+        old_run = (RunRecord) getIntent().getSerializableExtra("old_run");
 
-        height = getIntent().getIntExtra("height2", 170);
-        stringHeight = Integer.toString(height);
 
-        textDistance.setText(String.format("%.1f", Dist[Integer.parseInt(stringSeconds)]) + " м");
-        textSteps.setText(getIntent().getStringExtra("steps") + " шагов");
-        textTime.setText(getIntent().getStringExtra("seconds") + " c");
+
+        String Distance_text=old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м", Steps_text = old_run.GetCurrentStepCount() + " шагов", Time_text = old_run.GetTicksAmount() + " c";
+        textDistance.setText(Distance_text);
+        textSteps.setText(Steps_text);
+        textTime.setText(Time_text);
     }
 
     public void competition (View view) {
         Intent intent1 = new Intent (this, TimeStepCounter.class);
-        intent1.putExtra("comp_dist", Dist);
-        intent1.putExtra("height", stringHeight);
+        intent1.putExtra("old_run", old_run);
+        intent1.putExtra("height", old_run.GetHeight());
+
         startActivity(intent1);
     }
 
