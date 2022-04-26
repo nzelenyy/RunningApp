@@ -80,7 +80,7 @@ public class RunRecord extends TimeStepCounter {
 
     int GetCurrentStepCount()
     {
-        return _ticks_amount;
+        return _current_run_steps_amount+_current_steps_amount;
     }
 
     ArrayList GetArrayList()
