@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/RunningAppM/app/src/main/res/layout/activity_time_step_counter.xml" value="0.1956521739130435" />
+        <entry key="..\:/Projects/RunningAppM/app/src/main/res/layout/small_progress_bar.xml" value="0.1956521739130435" />
         <entry key="app/src/main/res/layout/activity_first_results.xml" value="0.2011444091796875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.13957824707031252" />
         <entry key="app/src/main/res/layout/activity_time_step_counter.xml" value="0.22537846219712404" />
