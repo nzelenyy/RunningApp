@@ -13,6 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,22 +22,22 @@ import java.util.ArrayList;
 
 
 public class TimeStepCounter extends AppCompatActivity{
-    private TextView tv_Steps;
-    private TextView tv_Distance;
-    private TextView tv_Diff;
-
-    private double seconds;
-    private boolean running;
-
-
-
-    private RunRecord currentRun, prevRun;
-    private double MagnitudePrevious = 0; // шагомер
-
-    private ArrayList<ProgressBar> pb_Array;
     ConstraintLayout constraintLayout;
-    ProgressBar N_Pr;
-    int pb_amount = 2;
+    private TextView tv_Steps; // TextView для отображения актуального числа шагов
+    private TextView tv_Distance; // TextView для отображения актуальной проденой дистанции
+    private TextView tv_Diff; // TextView для отображения актуальной разницы
+    private ArrayList<ProgressBar> pb_Array; // Массив ProgressBar'ов для отображения статуса забега
+    private Button btn_Start;
+    private Button btn_Stop;
+    private Button btn_Finish;
+
+
+    private double seconds; //Счетчик, указывающий, сколько идет запись
+    private boolean running; // Булева переменная, указывающая, работает ли таймер
+    private RunRecord currentRun, prevRun;
+    private double MagnitudePrevious = 0; // Переменная, необходимая для храниения амплитуды
+
+    int pb_amount = 2;// Константа количества одновременных забегов
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,16 @@ public class TimeStepCounter extends AppCompatActivity{
 
         int height = getIntent().getIntExtra("height", 170);// считали рост
 
-        currentRun = new RunRecord(height);
+        currentRun = new RunRecord(height); //Вызвали конструктор текущего забега.
 
-        prevRun = (RunRecord) getIntent().getSerializableExtra("old_run");
+        prevRun = (RunRecord) getIntent().getSerializableExtra("old_run"); //Получили данные о prevRun из предыдущего activity
 
         tv_Steps = findViewById(R.id.text_steps);
         tv_Distance = findViewById(R.id.text_distance);
         tv_Diff = findViewById(R.id.textdiff);
+        btn_Start = findViewById(R.id.btnStart);
+        btn_Stop = findViewById(R.id.btnStop);
+        btn_Finish = findViewById(R.id.btnFinish);
         constraintLayout= findViewById(R.id.ConstritLayout);
 
         runTimer();
@@ -61,10 +65,9 @@ public class TimeStepCounter extends AppCompatActivity{
         pb_Array = new ArrayList<>();
         for(int i=0; i<pb_amount; i++)
         {
-            N_Pr = (ProgressBar) getLayoutInflater().inflate(R.layout.small_progress_bar, null);
+            ProgressBar N_Pr = (ProgressBar) getLayoutInflater().inflate(R.layout.small_progress_bar, null);
             N_Pr.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             N_Pr.setProgress(0);
-            //N_Pr.setX(-450+100*i);
             N_Pr.setY(-250-50*i);
             if(i==0)
             {
@@ -88,19 +91,18 @@ public class TimeStepCounter extends AppCompatActivity{
                     double Magnitude = Math.sqrt(x_acceleration*x_acceleration + y_acceleration*y_acceleration + z_acceleration*z_acceleration);
                     double MagnitudeDelta = Magnitude - MagnitudePrevious;
                     MagnitudePrevious = Magnitude;// вынести значения в константы
-                    if (MagnitudeDelta > 10) // бег -- формула для длины шага из интернета
+                    if (MagnitudeDelta > 10) //Сравнили со значением, соответствующему магнитуде шага при беге
                     {
                         currentRun.AddRunStep((int)seconds);
 
                     }
-                    else if (MagnitudeDelta > 1) // ходьба -- формула для длины шага из интернета
+                    else if (MagnitudeDelta > 1) //Сравнили со значением, соответствующему магнитуде шага
                     {
                         currentRun.AddStep((int)seconds);
                     }
-                    tv_Steps.setText(((currentRun.GetCurrentStepCount()) + " шагов"));
-                    tv_Distance.setText((String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds))) + " м").toString());
-                    tv_Diff.setText((String)(String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds)-prevRun.GetDistanceOnTick((int)seconds))) + " м"));
-                    Draw(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
+                    UpdateTextViews();
+                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
                 }
 
             }
@@ -131,9 +133,11 @@ public class TimeStepCounter extends AppCompatActivity{
                 if(running)
                 {
                     seconds++;
+                    UpdateTextViews();
+                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
                 }
                 handler.postDelayed(this, 1000);
-
             }
         });
 
@@ -141,10 +145,19 @@ public class TimeStepCounter extends AppCompatActivity{
 
     public void onCLickStart(View view) { //изменять видимость или доступность
         running = true;
+        btn_Start.setVisibility(View.INVISIBLE);
+        btn_Stop.setVisibility(View.VISIBLE);
+        btn_Finish.setVisibility(View.VISIBLE);
+        UpdateTextViews();
+        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
     } // кнопка СТАРТ
 
     public void onClickStop(View view) {//изменять видимость или доступность
         running = false;
+        btn_Start.setVisibility(View.VISIBLE);
+        btn_Finish.setVisibility(View.VISIBLE);
+        btn_Stop.setVisibility(View.INVISIBLE);
     } // кнопка СТОП
 
     public void onClickFinish(View view) { // кнопка ФИНИШ
@@ -155,7 +168,14 @@ public class TimeStepCounter extends AppCompatActivity{
         startActivity(intent); // переходим в FirstResults
     }
 
-    public void Draw(double current_value, double value_to_compare, boolean animate)
+    public void UpdateTextViews()
+    {
+        //Обновили значения всех TextView
+        tv_Steps.setText(((currentRun.GetCurrentStepCount()) + " шагов"));
+        tv_Distance.setText((String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds))) + " м").toString());
+        tv_Diff.setText((String)(String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds)-prevRun.GetDistanceOnTick((int)seconds))) + " м"));
+    }
+    public void UpdateProgressBars(double current_value, double value_to_compare, boolean animate)
     {
         double max_value = Math.max(current_value, value_to_compare);
 

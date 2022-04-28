@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public class RunRecord extends TimeStepCounter implements Serializable {
-    private final int _height;
-    private final ArrayList<Double> _records;
-    private int _ticks_amount;
+public class RunRecord implements Serializable {
+    private final int _height; //Высота человека
+    private final ArrayList<Double> _records; //Массив всех результатов
+    private int _ticks_amount; // Количество записанных "тиков"
     private int _current_steps_amount;
     private int _current_run_steps_amount;
     private double _current_distance;
@@ -15,7 +15,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
     RunRecord() {
         _records = new ArrayList<>();
         _height = 170;
-        _current_distance = (_height) / 400.0 + 0.37;
+        _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
@@ -35,7 +35,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
     RunRecord(int height) {
         _records = new ArrayList<>();
         _height = height;
-        _current_distance = (_height) / 400.0 + 0.37;
+        _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
@@ -49,7 +49,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         }
         _ticks_amount++;
         _current_run_steps_amount++;
-        _current_distance += (_height * 0.0065);
+        _current_distance += -(_height * 0.0065);
         _records.add(_current_distance);
     }
 
