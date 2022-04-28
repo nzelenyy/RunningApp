@@ -13,6 +13,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,31 +22,22 @@ import java.util.ArrayList;
 
 
 public class TimeStepCounter extends AppCompatActivity{
-    //переименовать все View, отсоединить ит интерфейса
-    private TextView Steps;
-    private TextView Distance;
-    private TextView Diff;
-
-    private double seconds;
-    private boolean running;
-
-    private int height = 170; // средний рост человека в России (М - 175, Ж - 164)
-
-
-    private RunRecord currentRun, prevRun;
-    private double MagnitudePrevious = 0; // шагомер
-    private Integer stepCount = 0; //счетчик шагов
-    private double distance = 0; // текущая дистанция
-    private double zeroStep; //удалить
-    // Перевести в arraylist
-    private double[] zeroDist; //старый пробег(переименовать или удалить)
-    private double[] Dist = new double[10000];
-    private String[] stringDist = new String [10000]; //удалить
-
-    private ArrayList<ProgressBar> pb_Array;
     ConstraintLayout constraintLayout;
-    ProgressBar N_Pr;
-    int pb_amount = 2;
+    private TextView tv_Steps; // TextView для отображения актуального числа шагов
+    private TextView tv_Distance; // TextView для отображения актуальной проденой дистанции
+    private TextView tv_Diff; // TextView для отображения актуальной разницы
+    private ArrayList<ProgressBar> pb_Array; // Массив ProgressBar'ов для отображения статуса забега
+    private Button btn_Start;
+    private Button btn_Stop;
+    private Button btn_Finish;
+
+
+    private double seconds; //Счетчик, указывающий, сколько идет запись
+    private boolean running; // Булева переменная, указывающая, работает ли таймер
+    private RunRecord currentRun, prevRun;
+    private double MagnitudePrevious = 0; // Переменная, необходимая для храниения амплитуды
+
+    int pb_amount = 2;// Константа количества одновременных забегов
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,40 +46,28 @@ public class TimeStepCounter extends AppCompatActivity{
 
         int height = getIntent().getIntExtra("height", 170);// считали рост
 
-        currentRun = new RunRecord(height);
-        //zeroStep = ((double)height)/400 + 0.37; // посчитали "нулевой шаг
-        // Вынести все ниже в 1 структуру в качестве аргумента, в creator написать заполнение нулями, удалить 50-53
-        //ArrayList old_run_data = getIntent().getParcelableExtra("old_run_array");
-        //if (old_run_data==null)
-        //{
-            //prevRun = new RunRecord();
-        //}
-        //else prevRun = new RunRecord(old_run_data);
-        prevRun = (RunRecord) getIntent().getSerializableExtra("old_run");
-        //double[] compDist = getIntent().getDoubleArrayExtra("comp_dist"); // считали массив, с которым будем сорвеноваться из FirstResults
-        //if (compDist != null) // если этот массив не null (то есть мы перешли из FirstResults, a не из MainActivity), то соревнуемся с ним
-        //{
-        //zeroDist = compDist;
-        //}
+        currentRun = new RunRecord(height); //Вызвали конструктор текущего забега.
 
-        Steps = findViewById(R.id.text_steps);
-        Distance = findViewById(R.id.text_distance);
-        Diff = findViewById(R.id.textdiff);
+        prevRun = (RunRecord) getIntent().getSerializableExtra("old_run"); //Получили данные о prevRun из предыдущего activity
+
+        tv_Steps = findViewById(R.id.text_steps);
+        tv_Distance = findViewById(R.id.text_distance);
+        tv_Diff = findViewById(R.id.textdiff);
+        btn_Start = findViewById(R.id.btnStart);
+        btn_Stop = findViewById(R.id.btnStop);
+        btn_Finish = findViewById(R.id.btnFinish);
         constraintLayout= findViewById(R.id.ConstritLayout);
 
         runTimer();
-        // ПЕРЕНЕСТИ ОБЪЯВЛЕНИЕ
         SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         pb_Array = new ArrayList<>();
         for(int i=0; i<pb_amount; i++)
         {
-            N_Pr = (ProgressBar) getLayoutInflater().inflate(R.layout.small_progress_bar, null);
+            ProgressBar N_Pr = (ProgressBar) getLayoutInflater().inflate(R.layout.small_progress_bar, null);
             N_Pr.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
             N_Pr.setProgress(0);
-            //N_Pr.setRotation(270);
-            //N_Pr.setX(-450+100*i);
             N_Pr.setY(-250-50*i);
             if(i==0)
             {
@@ -96,8 +76,9 @@ public class TimeStepCounter extends AppCompatActivity{
             constraintLayout.addView(N_Pr);
             pb_Array.add(N_Pr);
         }
-        Diff.setText(currentRun.GetHeight()+"");
-        // шагомер:
+
+        tv_Diff.setText((String)(currentRun.GetHeight()+""));
+
         SensorEventListener stepDetector = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent sensorEvent) {
@@ -110,28 +91,24 @@ public class TimeStepCounter extends AppCompatActivity{
                     double Magnitude = Math.sqrt(x_acceleration*x_acceleration + y_acceleration*y_acceleration + z_acceleration*z_acceleration);
                     double MagnitudeDelta = Magnitude - MagnitudePrevious;
                     MagnitudePrevious = Magnitude;// вынести значения в константы
-                    if (MagnitudeDelta > 10) // бег -- формула для длины шага из интернета
+                    if (MagnitudeDelta > 10) //Сравнили со значением, соответствующему магнитуде шага при беге
                     {
                         currentRun.AddRunStep((int)seconds);
 
                     }
-                    else if (MagnitudeDelta > 1) // ходьба -- формула для длины шага из интернета
+                    else if (MagnitudeDelta > 1) //Сравнили со значением, соответствующему магнитуде шага
                     {
                         currentRun.AddStep((int)seconds);
                     }
-                    //обработка условий остановки(остановки нет)
-                    // вынести в отдельный метод взаимодействия с UI
-                    Steps.setText((currentRun.GetCurrentStepCount()) + " шагов");
-                    Distance.setText(String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds))) + " м");
-                    Diff.setText(String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds)-prevRun.GetDistanceOnTick((int)seconds))) + " м");
-                    //stringDist[(int)seconds] = String.format("%.1f", (distance - zeroStep)); //удалить?
-                    Draw(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
+                    UpdateTextViews();
+                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
                 }
 
             }
 
             @Override
-            public void onAccuracyChanged(Sensor sensor, int i) {//???
+            public void onAccuracyChanged(Sensor sensor, int i) {
 
             }
         };
@@ -141,7 +118,7 @@ public class TimeStepCounter extends AppCompatActivity{
 
     // таймер:
     private void runTimer() {
-        final TextView textView = (TextView) findViewById(R.id.text_time); // в onCreate, переименовать
+        final TextView textView = findViewById(R.id.text_time); // в onCreate, переименовать
         final Handler handler= new Handler(); // хандлер используется для планирования выполнения кода в будущем
         handler.post(new Runnable() {
             @Override
@@ -156,9 +133,11 @@ public class TimeStepCounter extends AppCompatActivity{
                 if(running)
                 {
                     seconds++;
+                    UpdateTextViews();
+                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
                 }
                 handler.postDelayed(this, 1000);
-
             }
         });
 
@@ -166,10 +145,19 @@ public class TimeStepCounter extends AppCompatActivity{
 
     public void onCLickStart(View view) { //изменять видимость или доступность
         running = true;
+        btn_Start.setVisibility(View.INVISIBLE);
+        btn_Stop.setVisibility(View.VISIBLE);
+        btn_Finish.setVisibility(View.VISIBLE);
+        UpdateTextViews();
+        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+
     } // кнопка СТАРТ
 
     public void onClickStop(View view) {//изменять видимость или доступность
         running = false;
+        btn_Start.setVisibility(View.VISIBLE);
+        btn_Finish.setVisibility(View.VISIBLE);
+        btn_Stop.setVisibility(View.INVISIBLE);
     } // кнопка СТОП
 
     public void onClickFinish(View view) { // кнопка ФИНИШ
@@ -180,11 +168,17 @@ public class TimeStepCounter extends AppCompatActivity{
         startActivity(intent); // переходим в FirstResults
     }
 
-    public void Draw(double current_value, double value_to_compare, boolean animate)
+    public void UpdateTextViews()
     {
-        double max_value;
-        if(current_value>value_to_compare) max_value = current_value;
-        else max_value = value_to_compare;
+        //Обновили значения всех TextView
+        tv_Steps.setText(((currentRun.GetCurrentStepCount()) + " шагов"));
+        tv_Distance.setText((String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds))) + " м").toString());
+        tv_Diff.setText((String)(String.format("%.1f", (currentRun.GetDistanceOnTick((int)seconds)-prevRun.GetDistanceOnTick((int)seconds))) + " м"));
+    }
+    public void UpdateProgressBars(double current_value, double value_to_compare, boolean animate)
+    {
+        double max_value = Math.max(current_value, value_to_compare);
+
         int current_value_scaled, value_to_compare_scaled;
         current_value_scaled = (int)(current_value/max_value*100);
         value_to_compare_scaled = (int)(value_to_compare/max_value*100);

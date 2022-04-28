@@ -17,23 +17,22 @@ public class FirstResults extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_results);
 
-        TextView textDistance;
-        TextView textSteps;
-        TextView textTime;
+        TextView tv_Distance;
+        TextView tv_Steps;
+        TextView tv_Time;
 
 
-        textDistance = findViewById(R.id.textDistance);
-        textSteps =  findViewById(R.id.textSteps);
-        textTime = findViewById(R.id.textTime);
+        tv_Distance = findViewById(R.id.textDistance);
+        tv_Steps =  findViewById(R.id.textSteps);
+        tv_Time = findViewById(R.id.textTime);
 
         old_run = (RunRecord) getIntent().getSerializableExtra("old_run");
 
 
 
-        String Distance_text=old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м", Steps_text = old_run.GetCurrentStepCount() + " шагов", Time_text = old_run.GetTicksAmount() + " c";
-        textDistance.setText(Distance_text);
-        textSteps.setText(Steps_text);
-        textTime.setText(Time_text);
+        tv_Distance.setText((String)(old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м"));
+        tv_Steps.setText((String)(old_run.GetCurrentStepCount() + " шагов"));
+        tv_Time.setText((String)(old_run.GetTicksAmount() + " c"));
     }
 
     public void competition (View view) {
