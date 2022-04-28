@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import com.example.runningapp.db.AppDatabase;
+import com.example.runningapp.db.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstResults extends AppCompatActivity {
 
@@ -33,6 +38,44 @@ public class FirstResults extends AppCompatActivity {
         tv_Distance.setText((String)(old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м"));
         tv_Steps.setText((String)(old_run.GetCurrentStepCount() + " шагов"));
         tv_Time.setText((String)(old_run.GetTicksAmount() + " c"));
+        saveNewTrack(old_run);
+
+
+        //insert savenewtrack
+    }
+    public void saveNewTrack (RunRecord Record) {
+        AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
+        ArrayList<Double> ArrayForRecord;
+       // int number_of_tracks=1;
+        int number_of_tracks=0;
+        if (db.userDao().getMaxTrackID()!=null) {
+            number_of_tracks = db.userDao().getMaxTrackID() + 1;
+        }
+        //int basic;
+        //basic=db.userDao().getMaxTrackID();
+        int temp_seconds;
+        temp_seconds=0;
+        //double temp_distance;
+        ArrayForRecord= Record.GetArrayList();
+        for (Double i: ArrayForRecord) {
+            saveNewUser(temp_seconds, i, number_of_tracks);
+            ++temp_seconds;
+        }
+    }
+
+
+
+    private void saveNewUser(int firstName, double lastName, int number_of_tracks) {
+        AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
+
+        User user = new User();
+        user.firstName = firstName;
+        user.track_id=number_of_tracks;
+        user.lastName = lastName;
+        db.userDao().insertUser(user);
+
+       // finish();
+
     }
 
     public void competition (View view) {
