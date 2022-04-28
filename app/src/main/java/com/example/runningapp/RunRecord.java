@@ -5,7 +5,8 @@ import java.util.ArrayList;
 
 
 public class RunRecord extends TimeStepCounter implements Serializable {
-    private int _height;private ArrayList _records;
+    private final int _height;
+    private final ArrayList<Double> _records;
     private int _ticks_amount;
     private int _current_steps_amount;
     private int _current_run_steps_amount;
@@ -20,9 +21,9 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         _ticks_amount = 0;
     }
 
-    RunRecord(ArrayList new_ArrayList)
+    RunRecord(ArrayList<Double> new_ArrayList)
     {
-        _records.add(new_ArrayList);
+        _records = new_ArrayList;
         _height = 170;
         _current_steps_amount = _records.size();
         _ticks_amount = _records.size();
@@ -40,7 +41,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         _ticks_amount = 0;
     }
 
-    boolean AddRunStep(int new_time) {
+    void AddRunStep(int new_time) {
         while(_ticks_amount< new_time+1)
         {
             _records.add(_current_distance);
@@ -50,10 +51,9 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         _current_run_steps_amount++;
         _current_distance += (_height * 0.0065);
         _records.add(_current_distance);
-        return true;
     }
 
-    boolean AddStep(int new_time) {
+    void AddStep(int new_time) {
         while(_ticks_amount< new_time+1)
         {
             _records.add(_current_distance);
@@ -63,7 +63,6 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         _current_steps_amount++;
         _current_distance += ((_height) / 400.0 + 0.37);
         _records.add(_current_distance);
-        return true;
     }
 
     double GetDistanceOnTick(int requested_tick) {
@@ -78,7 +77,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
         return _current_steps_amount+_current_run_steps_amount;
     }
 
-    ArrayList GetArrayList()
+    ArrayList<Double> GetArrayList()
     {
         return _records;
     }
