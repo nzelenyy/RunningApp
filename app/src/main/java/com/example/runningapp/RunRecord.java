@@ -74,7 +74,7 @@ public class RunRecord extends TimeStepCounter implements Serializable {
 
     int GetCurrentStepCount()
     {
-        return _current_steps_amount+_current_run_steps_amount;
+        return _current_run_steps_amount+_current_steps_amount;
     }
 
     ArrayList<Double> GetArrayList()
