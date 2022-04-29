@@ -43,13 +43,13 @@ public class FirstResults extends AppCompatActivity {
 
         //insert savenewtrack
     }
-    public void saveNewTrack (RunRecord Record) {
+    public void saveNewTrack (RunRecord Record) { //сохраняем новый Track
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
         ArrayList<Double> ArrayForRecord;
        // int number_of_tracks=1;
         int number_of_tracks=0;
         if (db.userDao().getMaxTrackID()!=null) {
-            number_of_tracks = db.userDao().getMaxTrackID() + 1;
+            number_of_tracks = db.userDao().getMaxTrackID() + 1; //узнаем, какой track_id еще не занят
         }
         //int basic;
         //basic=db.userDao().getMaxTrackID();
@@ -58,14 +58,14 @@ public class FirstResults extends AppCompatActivity {
         //double temp_distance;
         ArrayForRecord= Record.GetArrayList();
         for (Double i: ArrayForRecord) {
-            saveNewUser(temp_seconds, i, number_of_tracks);
+            saveNewUser(temp_seconds, i, number_of_tracks); //сохраняем в цикле точки
             ++temp_seconds;
         }
     }
 
 
 
-    private void saveNewUser(int firstName, double lastName, int number_of_tracks) {
+    private void saveNewUser(int firstName, double lastName, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
         User user = new User();
