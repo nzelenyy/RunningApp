@@ -40,9 +40,6 @@ public class FirstResults extends AppCompatActivity {
         tv_Steps.setText(tv_Steps_text);
         tv_Time.setText(tv_Time_text);
         saveNewTrack(old_run);
-
-
-        //insert savenewtrack
     }
     public void saveNewTrack (RunRecord Record) { //сохраняем новый Track
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
