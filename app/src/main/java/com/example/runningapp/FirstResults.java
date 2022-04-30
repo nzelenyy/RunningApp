@@ -74,7 +74,7 @@ public class FirstResults extends AppCompatActivity {
         user.distance = Distance;
         db.userDao().insertUser(user);
 
-       // finish();
+
 
     }
 
