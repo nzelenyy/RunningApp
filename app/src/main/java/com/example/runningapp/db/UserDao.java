@@ -35,7 +35,7 @@ public interface UserDao {
     @Query("SELECT last_name FROM user WHERE last_name==(SELECT MAX(CAST (last_name AS DOUBLE)) FROM user WHERE (track_id LIKE :given_id))")
     Double getLastName(int given_id);
 
-    @Query("SELECT track_id FROM user")
+    @Query("SELECT DISTINCT track_id FROM user")
     List<Integer> getIDs();
 
     @Query("SELECT track_id FROM user WHERE track_id==(SELECT MAX(CAST (track_id AS INT)) FROM user)")
