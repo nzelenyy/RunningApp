@@ -34,85 +34,138 @@ public class runs_choice extends Activity {
         GetIDs();
         GetTimings();
         GetDistances();
-        for(int i=0; i<IDs.size(); i++)
+        for(int i=0; i<IDs.size()+1; i++)
         {
             TextView tv_ID=new TextView(runs_choice.this, null);
             TextView tv_Distance=new TextView(runs_choice.this, null);
             TextView tv_Time=new TextView(runs_choice.this, null);
             Button btn_Choose = new Button(runs_choice.this, null);
 
-            tv_ID.setText((String)(IDs.get(i)+""));
-            tv_Distance.setText((String)(Distances.get(i)+""));
-            tv_Time.setText((String)(Timings.get(i)+""));
-            btn_Choose.setText("Начать");
+            if(i<IDs.size()) {
+                String time = String.format("%d:%02d:%02d", Timings.get(i) / 3600, (Timings.get(i) % 3600) / 60, (Timings.get(i)) % 60);
 
-            tv_ID.setId(4*i);
-            tv_Distance.setId(4*i+1);
-            tv_Time.setId(4*i+2);
-            btn_Choose.setId(4*i+3);
+                tv_ID.setText((String) (IDs.get(i) + ""));
+                tv_Distance.setText((String) (Distances.get(i) + ""));
+                tv_Time.setText(time);
+                btn_Choose.setText("Начать");
 
-            tv_ID.setY(150*i);
-            tv_ID.setX(0);
-            tv_Distance.setY(150*i);
-            tv_Distance.setX(50);
-            tv_Time.setY(150*i+50);
-            tv_Time.setX(50);
-            btn_Choose.setY(150*i);
-            btn_Choose.setX(200);
+                tv_ID.setId(4 * i);
+                tv_Distance.setId(4 * i + 1);
+                tv_Time.setId(4 * i + 2);
+                btn_Choose.setId(4 * i + 3);
 
+                tv_ID.setTextSize(30);
+
+
+                tv_ID.setY(150 * i);
+                tv_ID.setX(0);
+
+                tv_Distance.setY(150 * i);
+                tv_Distance.setX(100);
+
+                tv_Time.setY(150 * i + 50);
+                tv_Time.setX(100);
+
+                btn_Choose.setY(150 * i);
+                btn_Choose.setX(800);
+            }
+            else
+            {
+                tv_ID.setText((String) (""));
+                tv_Distance.setText("");
+                tv_Time.setText(" ");
+                btn_Choose.setText("Начать");
+
+                tv_ID.setId(4 * i);
+                tv_Distance.setId(4 * i + 1);
+                tv_Time.setId(4 * i + 2);
+                btn_Choose.setId(4 * i + 3);
+
+                tv_ID.setTextSize(30);
+
+
+                tv_ID.setY(150 * i);
+                tv_ID.setX(0);
+
+                tv_Distance.setY(150 * i);
+                tv_Distance.setX(100);
+
+                tv_Time.setY(150 * i + 50);
+                tv_Time.setX(100);
+
+                btn_Choose.setY(150 * i);
+                btn_Choose.setX(800);
+
+            }
             btn_Choose.setOnClickListener(this::OnClick);
 
             relativeLayout.addView(tv_ID);
             relativeLayout.addView(tv_Distance);
             relativeLayout.addView(tv_Time);
             relativeLayout.addView(btn_Choose);
+
+
         }
+
+
     }
 
     private void GetDistances() {
-        Distances.add(0.1);
-        Distances.add(1.1);
-        Distances.add(2.2);
-        Distances.add(3.3);
-        Distances.add(4.4);
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        for(int i=0;i<IDs.size();i++)
+        {
+            Double newLastName;
+            newLastName=db.userDao().getLastName(IDs.get(i));
+            Distances.add(newLastName);
+        }
 
     }
 
     void GetIDs()
     {
-        IDs.add(0);
-        IDs.add(1);
-        IDs.add(2);
-        IDs.add(3);
-        IDs.add(4);
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+        List<Integer> newIDs;
+        newIDs=db.userDao().getIDs();
+        for(int i=0; i<newIDs.size(); i++)
+        {
+            IDs.add(newIDs.get(i));
+        }
     }
 
     void GetTimings()
     {
-        Timings.add(1);
-        Timings.add(100);
-        Timings.add(200);
-        Timings.add(300);
-        Timings.add(400);
+        AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+
+        for(int i=0;i<IDs.size(); i++)
+        {
+            Integer newFirstName;
+            newFirstName=db.userDao().getFirstName(IDs.get(i));
+            Timings.add(newFirstName);
+        }
     }
 
     void OnClick(View v)
     {
-        TextView textView = findViewById(0);
-        int chosen_id = ((int)v.getId()-3)/4;
-        AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
-        //   List<Integer> newFirstNames;
-        List<Double> newLastNames;
-        // newFirstNames=db.userDao().getFirstNames(2);
-        newLastNames=db.userDao().getLastNames(0);
-        ArrayList<Double> newArrayList=new ArrayList<Double>();
-        for (Double i: newLastNames) {
-            newArrayList.add(i);
-        }
-
+        RunRecord old_run;
+        int chosen_id = ((int) v.getId() - 3) / 4;
         Intent intent = new Intent(this, TimeStepCounter.class);
-        //RunRecord old_run = RunRecord(Integer.valueOf(height.getText()));
-        RunRecord old_run = new RunRecord(newArrayList);
+        if(IDs.size()!=chosen_id) {
+
+
+            TextView textView = findViewById(0);
+            AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
+            List<Double> newLastNames;
+            newLastNames = db.userDao().getLastNames(IDs.get(chosen_id));
+            ArrayList<Double> newArrayList = new ArrayList<Double>();
+            for (Double i : newLastNames) {
+                newArrayList.add(i);
+            }
+            old_run = new RunRecord(newArrayList);
+        }
+        else
+        {
+            old_run = new RunRecord(175);
+        }
         intent.putExtra("old_run", old_run);
         startActivity(intent);
     }
