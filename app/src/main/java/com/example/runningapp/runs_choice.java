@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class runs_choice extends Activity {
-    ArrayList<Integer> IDs;
-    ArrayList<Integer> Timings;
-    ArrayList<Double> Distances;
+    ArrayList<Integer> IDs; // все track_id
+    ArrayList<Integer> Timings; // все продолжительности забегов
+    ArrayList<Double> Distances; // все расстояния забегов
 
     RelativeLayout relativeLayout;
 
@@ -32,9 +32,7 @@ public class runs_choice extends Activity {
         Timings = new ArrayList<Integer>();
         Distances = new ArrayList<Double>();
 
-
-
-        UpdatePage();
+        UpdatePage(); //заполняет массивы и отображает все данные
     }
 
     private void GetDistances() {
@@ -50,6 +48,7 @@ public class runs_choice extends Activity {
 
     void GetIDs()
     {
+        // считывание track_id из базы
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Integer> newIDs;
         newIDs=db.userDao().getIDs();
@@ -61,6 +60,8 @@ public class runs_choice extends Activity {
 
     void GetTimings()
     {
+        // считывание Timings из базы
+
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
 
         for(int i=0;i<IDs.size(); i++)
@@ -71,34 +72,36 @@ public class runs_choice extends Activity {
         }
     }
 
-    void OnClick(View v)
+    void OnClick(View v)  //  Обработчик кнопки  "начать"
     {
         RunRecord old_run;
-        int chosen_id = IDs.get(((int) v.getId() - 3) / 5);
+        int chosen_id = IDs.get(((int) v.getId() - 3) / 5); // находит нужный id
+
         Intent intent = new Intent(this, TimeStepCounter.class);
+
         TextView textView = findViewById(0);
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Double> newLastNames;
-        newLastNames = db.userDao().getLastNames(IDs.get(chosen_id));
+        newLastNames = db.userDao().getLastNames(IDs.get(chosen_id)); //считывает все записанные точки из базы
         ArrayList<Double> newArrayList = new ArrayList<Double>();
         for (Double i : newLastNames) {
             newArrayList.add(i);
         }
         old_run = new RunRecord(newArrayList);
-        intent.putExtra("old_run", old_run);
+        intent.putExtra("old_run", old_run); //передает intent в следующий activity
         startActivity(intent);
     }
 
-    void OnClickDelete(View v)
+    void OnClickDelete(View v)  //  Обработчик кнопки  "Удалить"
     {
-        int chosen_id = IDs.get(((int) v.getId() - 4) / 5);
+        int chosen_id = IDs.get(((int) v.getId() - 4) / 5);// находит нужный id
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
-        db.userDao().DeleteGivenTrack(chosen_id);
-        Intent intent = new Intent(this, runs_choice.class);
+        db.userDao().DeleteGivenTrack(chosen_id); //Удаляет запись
+        Intent intent = new Intent(this, runs_choice.class); // перезапускает страницу
         startActivity(intent);
     }
 
-    void OnClickTest(View v)
+    void OnClickTest(View v) //  Обработчик кнопки "Тест"
     {
         Intent intent = new Intent(this, TimeStepCounter.class);
         RunRecord old_run = new RunRecord(175);
