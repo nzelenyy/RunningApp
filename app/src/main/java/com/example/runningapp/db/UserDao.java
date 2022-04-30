@@ -25,7 +25,7 @@ public interface UserDao {
     @Query ("SELECT first_name FROM user WHERE track_id like :given_id ORDER BY uid ASC")
     List<Integer> getFirstNames(int given_id);
 
-    @Query ("SELECT last_name FROM user WHERE track_id like :given_id ORDER BY uid ASC")
+    @Query ("SELECT last_name FROM user WHERE track_id == :given_id ORDER BY uid ASC")
     List<Double> getLastNames(int given_id);
 
 
