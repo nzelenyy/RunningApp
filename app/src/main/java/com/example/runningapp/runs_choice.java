@@ -71,6 +71,30 @@ public class runs_choice extends Activity {
             }
             else
             {
+                tv_ID.setText((String) (""));
+                tv_Distance.setText("");
+                tv_Time.setText(" ");
+                btn_Choose.setText("Начать");
+
+                tv_ID.setId(4 * i);
+                tv_Distance.setId(4 * i + 1);
+                tv_Time.setId(4 * i + 2);
+                btn_Choose.setId(4 * i + 3);
+
+                tv_ID.setTextSize(30);
+
+
+                tv_ID.setY(150 * i);
+                tv_ID.setX(0);
+
+                tv_Distance.setY(150 * i);
+                tv_Distance.setX(100);
+
+                tv_Time.setY(150 * i + 50);
+                tv_Time.setX(100);
+
+                btn_Choose.setY(150 * i);
+                btn_Choose.setX(800);
 
             }
             btn_Choose.setOnClickListener(this::OnClick);
@@ -123,12 +147,12 @@ public class runs_choice extends Activity {
     void OnClick(View v)
     {
         RunRecord old_run;
+        int chosen_id = ((int) v.getId() - 3) / 4;
         Intent intent = new Intent(this, TimeStepCounter.class);
-        if(IDs.size()!=0) {
+        if(IDs.size()!=chosen_id) {
 
 
             TextView textView = findViewById(0);
-            int chosen_id = ((int) v.getId() - 3) / 4;
             AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
             List<Double> newLastNames;
             newLastNames = db.userDao().getLastNames(IDs.get(chosen_id));
