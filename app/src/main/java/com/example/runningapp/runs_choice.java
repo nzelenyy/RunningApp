@@ -40,7 +40,7 @@ public class runs_choice extends Activity {
         for(int i=0;i<IDs.size();i++)
         {
             Double newLastName;
-            newLastName=db.userDao().getLastName(IDs.get(i));
+            newLastName=db.userDao().getDistance(IDs.get(i));
             Distances.add(newLastName);
         }
 
@@ -67,7 +67,7 @@ public class runs_choice extends Activity {
         for(int i=0;i<IDs.size(); i++)
         {
             Integer newFirstName;
-            newFirstName=db.userDao().getFirstName(IDs.get(i));
+            newFirstName=db.userDao().getSecond(IDs.get(i));
             Timings.add(newFirstName);
         }
     }
@@ -82,7 +82,7 @@ public class runs_choice extends Activity {
         TextView textView = findViewById(0);
         AppDatabase db = AppDatabase.getDbInstance(this.getApplicationContext());
         List<Double> newLastNames;
-        newLastNames = db.userDao().getLastNames(IDs.get(chosen_id)); //считывает все записанные точки из базы
+        newLastNames = db.userDao().getDistances(IDs.get(chosen_id)); //считывает все записанные точки из базы
         ArrayList<Double> newArrayList = new ArrayList<Double>();
         for (Double i : newLastNames) {
             newArrayList.add(i);

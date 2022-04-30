@@ -19,8 +19,8 @@ public class RunRecord implements Serializable {
     RunRecord() {
         _records = new ArrayList<>();
         _height = 170;
-        _current_distance =0;
-        //_current_distance = -(_height) / 400.0 + 0.37;
+        //_current_distance =0;
+        _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
@@ -40,8 +40,8 @@ public class RunRecord implements Serializable {
     RunRecord(int height) {
         _records = new ArrayList<>();
         _height = height;
-        _current_distance =0;
-        //_current_distance = -(_height) / 400.0 + 0.37;
+        //_current_distance =0;
+        _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
@@ -55,7 +55,7 @@ public class RunRecord implements Serializable {
         }
         _ticks_amount++;
         _current_run_steps_amount++;
-        _current_distance += -(_height * 0.0065);
+        _current_distance += (_height * 0.0065);
         _records.add(_current_distance);
     }
 

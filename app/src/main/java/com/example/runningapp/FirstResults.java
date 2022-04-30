@@ -58,20 +58,20 @@ public class FirstResults extends AppCompatActivity {
         //double temp_distance;
         ArrayForRecord= Record.GetArrayList();
         for (Double i: ArrayForRecord) {
-            saveNewUser(temp_seconds, i, number_of_tracks); //сохраняем в цикле точки
+            saveNewDot(temp_seconds, i, number_of_tracks); //сохраняем в цикле точки
             ++temp_seconds;
         }
     }
 
 
 
-    private void saveNewUser(int firstName, double lastName, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
+    private void saveNewDot(int Seconds, double Distance, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
         User user = new User();
-        user.firstName = firstName;
+        user.seconds = Seconds;
         user.track_id=number_of_tracks;
-        user.lastName = lastName;
+        user.distance = Distance;
         db.userDao().insertUser(user);
 
        // finish();
