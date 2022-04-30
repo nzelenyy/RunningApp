@@ -75,7 +75,6 @@ public class FirstResults extends AppCompatActivity {
         db.userDao().insertUser(user);
 
 
-
     }
 
     public void competition (View view) {
