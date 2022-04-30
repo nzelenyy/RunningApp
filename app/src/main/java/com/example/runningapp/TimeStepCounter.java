@@ -85,7 +85,7 @@ public class TimeStepCounter extends AppCompatActivity{
             pb_Array.add(N_Pr);
         }
 
-        tv_Diff.setText((String)(currentRun.GetHeight()+""));
+        //tv_Diff.setText((String)(currentRun.GetHeight()+""));
 
         SensorEventListener stepDetector = new SensorEventListener() {
             @Override
