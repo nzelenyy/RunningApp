@@ -27,8 +27,10 @@ public class MainActivity extends AppCompatActivity {
     public void goToNewActivity(View view) {
         Intent intent = new Intent(this, runs_choice.class);
         startActivity(intent);
+    }
 
-
-
+    public void goToSettings(View view) {
+        Intent intent = new Intent(MainActivity.this, Settings.class);
+        startActivity(intent);
     }
 }

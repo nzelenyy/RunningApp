@@ -1,5 +1,8 @@
 package com.example.runningapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -11,6 +14,7 @@ public class RunRecord implements Serializable {
     private int _current_steps_amount;
     private int _current_run_steps_amount;
     private double _current_distance;
+
 
     RunRecord() {
         _records = new ArrayList<>();

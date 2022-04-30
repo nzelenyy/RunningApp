@@ -2,19 +2,22 @@ package com.example.runningapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class Settings extends AppCompatActivity implements View.OnClickListener{
 
     EditText etextHeight , etextWalking, etextRunning;
     Button btnSave, btnLoad;
 
+    private SharedPreferences sharedPrefs;
+    SharedPreferences.Editor ed;
+    public static final String PREF = "myprefs";
 
 
     @Override
@@ -30,6 +33,9 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
         btnSave.setOnClickListener(this);
         btnLoad = (Button)findViewById(R.id.btnLoad);
         btnLoad.setOnClickListener(this);
+
+        sharedPrefs = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        ed = sharedPrefs.edit();
 
         loadText();
     }
@@ -51,34 +57,25 @@ public class Settings extends AppCompatActivity implements View.OnClickListener{
 
 
     private void saveText() {
-        SharedPreferences.Editor ed = getPreferences(MODE_PRIVATE).edit();
         String stringHeight = etextHeight.getText().toString();
-        ed.putInt("height", Integer.parseInt(stringHeight));
-        ed.apply();
-
-        SharedPreferences.Editor ed1 = getPreferences(MODE_PRIVATE).edit();
         String stringC1 = etextWalking.getText().toString();
-        ed1.putInt("walking", Integer.parseInt(stringC1));
-        ed1.apply();
-
-        SharedPreferences.Editor ed2 = getPreferences(MODE_PRIVATE).edit();
         String stringC2 = etextRunning.getText().toString();
-        ed2.putInt("running", Integer.parseInt(stringC2));
-        ed2.apply();
+
+        ed.putInt("height", Integer.parseInt(stringHeight));
+        ed.putInt("walking", Integer.parseInt(stringC1));
+        ed.putInt("running", Integer.parseInt(stringC2));
+
+        ed.apply();
     }
 
 
     private void loadText() {
-        SharedPreferences sPrefHeight = getPreferences(MODE_PRIVATE);
-        int savedHeight = sPrefHeight.getInt("height", 170);        // ВОТ ТУТ ПОЛУЧАЕМ ДАННЫЕ
+        int savedHeight = sharedPrefs.getInt("height", 170);
+        int savedC1 = sharedPrefs.getInt("walking", 6);
+        int savedC2 = sharedPrefs.getInt("running", 10);
+
         etextHeight.setText(String.valueOf(savedHeight));
-
-        SharedPreferences sPrefC1 = getPreferences(MODE_PRIVATE);
-        int savedC1 = sPrefC1.getInt("walking", 6);
         etextWalking.setText(String.valueOf(savedC1));
-
-        SharedPreferences sPrefC2 = getPreferences(MODE_PRIVATE);
-        int savedC2 = sPrefC2.getInt("running", 10);
         etextRunning.setText(String.valueOf(savedC2));
     }
 
