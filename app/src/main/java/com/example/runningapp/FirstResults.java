@@ -35,9 +35,10 @@ public class FirstResults extends AppCompatActivity {
 
 
 
-        tv_Distance.setText((String)(old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м"));
-        tv_Steps.setText((String)(old_run.GetCurrentStepCount() + " шагов"));
-        tv_Time.setText((String)(old_run.GetTicksAmount() + " c"));
+        String tv_Distance_text = old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м", tv_Steps_text=old_run.GetCurrentStepCount() + " шагов", tv_Time_text=old_run.GetTicksAmount() + " c";
+        tv_Distance.setText(tv_Distance_text);
+        tv_Steps.setText(tv_Steps_text);
+        tv_Time.setText(tv_Time_text);
         saveNewTrack(old_run);
 
 
@@ -73,8 +74,6 @@ public class FirstResults extends AppCompatActivity {
         user.track_id=number_of_tracks;
         user.distance = Distance;
         db.userDao().insertUser(user);
-
-
     }
 
     public void competition (View view) {
