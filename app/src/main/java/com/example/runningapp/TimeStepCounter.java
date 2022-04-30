@@ -105,15 +105,17 @@ public class TimeStepCounter extends AppCompatActivity{
                     if (MagnitudeDelta > C1) //Сравнили со значением, соответствующему магнитуде шага при беге
                     {
                         currentRun.AddRunStep((int)seconds);
+                        UpdateTextViews();
+                        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
                     }
                     else if (MagnitudeDelta > C2) //Сравнили со значением, соответствующему магнитуде шага
                     {
                         currentRun.AddStep((int)seconds);
-                    }
+                        UpdateTextViews();
+                        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
-                    UpdateTextViews();
-                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+                    }
                 }
 
             }
@@ -159,6 +161,7 @@ public class TimeStepCounter extends AppCompatActivity{
         btn_Start.setVisibility(View.INVISIBLE);
         btn_Stop.setVisibility(View.VISIBLE);
         btn_Finish.setVisibility(View.VISIBLE);
+        currentRun.AddStep((int)seconds);
         UpdateTextViews();
         UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
