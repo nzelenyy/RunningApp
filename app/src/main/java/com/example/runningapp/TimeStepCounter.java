@@ -100,7 +100,7 @@ public class TimeStepCounter extends AppCompatActivity{
                     double MagnitudeDelta = Magnitude - MagnitudePrevious;
                     MagnitudePrevious = Magnitude;// вынести значения в константы
                     sharedPrefs = getSharedPreferences(PREF, Context.MODE_PRIVATE);
-                    int C1 = sharedPrefs.getInt("walking", 6);
+                    int C1 = sharedPrefs.getInt("walking", 1);
                     int C2 = sharedPrefs.getInt("running", 10);
                     if (MagnitudeDelta > C1) //Сравнили со значением, соответствующему магнитуде шага при беге
                     {
@@ -161,7 +161,7 @@ public class TimeStepCounter extends AppCompatActivity{
         btn_Start.setVisibility(View.INVISIBLE);
         btn_Stop.setVisibility(View.VISIBLE);
         btn_Finish.setVisibility(View.VISIBLE);
-        currentRun.AddStep((int)seconds);
+        //currentRun.AddStep((int)seconds);
         UpdateTextViews();
         UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
