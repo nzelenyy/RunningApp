@@ -41,6 +41,9 @@ public interface UserDao {
     @Query("SELECT track_id FROM user WHERE track_id==(SELECT MAX(CAST (track_id AS INT)) FROM user)")
     Integer getMaxTrackID();
 
+    @Query ("DELETE FROM user WHERE track_id like :given_id")
+    Void DeleteGivenTrack(int given_id);
+
     /*@Query(
             "SELECT * FROM user" +
                     "JOIN book ON user.id = book.user_id"
