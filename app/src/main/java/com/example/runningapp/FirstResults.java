@@ -79,11 +79,11 @@ public class FirstResults extends AppCompatActivity {
     }
 
     public void competition (View view) {
-        Intent intent1 = new Intent (this, TimeStepCounter.class);
-        intent1.putExtra("old_run", old_run);
-        intent1.putExtra("height", old_run.GetHeight());
+        Intent intent = new Intent (this, TimeStepCounter.class);
+        intent.putExtra("old_run", old_run);
+        intent.putExtra("height", old_run.GetHeight());
 
-        startActivity(intent1);
+        startActivity(intent);
     }
 
     public void reset (View view) {
