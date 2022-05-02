@@ -36,7 +36,7 @@ public class RunRecord implements Serializable {
         _ticks_amount = _records.size();
         _current_run_steps_amount=0;
         if(_ticks_amount==0) _current_distance=0;
-        else _current_distance=(double)_records.get(_ticks_amount-1);
+        else _current_distance=_records.get(_ticks_amount-1);
     }
 
     RunRecord(int height) {
@@ -75,15 +75,13 @@ public class RunRecord implements Serializable {
 
     double GetDistanceOnTick(int requested_tick) {
 
-        switch (_is_testing_record)
-        {
-            case 0:
-                if (requested_tick >= _ticks_amount) //return _current_distance;
-                    return _current_distance;
-                return ((double) _records.get(requested_tick));
-            default:
-                return getTestResult(requested_tick);
+        if(_is_testing_record==0) {
+            if (requested_tick >= _ticks_amount) //return _current_distance;
+                return _current_distance;
+            return (_records.get(requested_tick));
         }
+        else return getTestResult(requested_tick);
+
     }
 
     int GetCurrentStepCount()
@@ -123,7 +121,7 @@ public class RunRecord implements Serializable {
             case 2:
                 return "A320 flying";
             default:
-                return "Test not Found";
+                return "Test not found";
         }
     }
 
