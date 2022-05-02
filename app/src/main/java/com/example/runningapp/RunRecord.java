@@ -14,12 +14,13 @@ public class RunRecord implements Serializable {
     private int _current_steps_amount;
     private int _current_run_steps_amount;
     private double _current_distance;
+    private int _is_testing_record;
 
 
     RunRecord() {
+        _is_testing_record = 0;
         _records = new ArrayList<>();
         _height = 170;
-        //_current_distance =0;
         _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
@@ -28,6 +29,7 @@ public class RunRecord implements Serializable {
 
     RunRecord(ArrayList<Double> new_ArrayList)
     {
+        _is_testing_record=0;
         _records = new_ArrayList;
         _height = 170;
         _current_steps_amount = _records.size();
@@ -40,7 +42,7 @@ public class RunRecord implements Serializable {
     RunRecord(int height) {
         _records = new ArrayList<>();
         _height = height;
-        //_current_distance =0;
+        _is_testing_record=0;
         _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
@@ -72,10 +74,16 @@ public class RunRecord implements Serializable {
     }
 
     double GetDistanceOnTick(int requested_tick) {
-        if (requested_tick >= _ticks_amount) //return _current_distance;
-            return _current_distance;
-        return ((double) _records.get(requested_tick));
 
+        switch (_is_testing_record)
+        {
+            case 0:
+                if (requested_tick >= _ticks_amount) //return _current_distance;
+                    return _current_distance;
+                return ((double) _records.get(requested_tick));
+            default:
+                return getTestResult(requested_tick);
+        }
     }
 
     int GetCurrentStepCount()
@@ -95,5 +103,55 @@ public class RunRecord implements Serializable {
 
     int GetTicksAmount(){
         return _ticks_amount;
+    }
+
+    void SetTesting()
+    {
+        _is_testing_record=1;
+    }
+
+    void SetTesting(int test_num)
+    {
+        _is_testing_record=test_num;
+    }
+
+    String getTestDescription(int test_num)
+    {
+        switch (test_num){
+            case 1:
+                return "Standing still";
+            case 2:
+                return "A320 flying";
+            default:
+                return "Test not Found";
+        }
+    }
+
+    String getTestDescription()
+    {
+        return getTestDescription(_is_testing_record);
+    }
+
+    double getTestResult(int test_num, int requested_tick)
+    {
+        switch (test_num){
+            case 1:
+                return 0.0;
+            case 2:
+                return (247.2*requested_tick);
+            default:
+                return 0.0;
+        }
+    }
+    double getTestResult(int requested_tick)
+    {
+        switch (_is_testing_record){
+            case 1:
+                return 0.0;
+            case 2:
+                return (247.2*requested_tick);
+            default:
+                return 0.0;
+        }
     }
 }
