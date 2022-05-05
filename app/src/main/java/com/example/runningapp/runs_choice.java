@@ -29,9 +29,9 @@ public class runs_choice extends Activity {
 
         linearLayout = findViewById(R.id.LinearLayoutInCsV);
 
-        IDs = new ArrayList<Integer>();
-        Timings = new ArrayList<Integer>();
-        Distances = new ArrayList<Double>();
+        IDs = new ArrayList<>();
+        Timings = new ArrayList<>();
+        Distances = new ArrayList<>();
 
         UpdatePage(); //заполняет массивы и отображает все данные
     }
@@ -104,18 +104,21 @@ public class runs_choice extends Activity {
 
     void OnClickTest(View v) //  Обработчик кнопки "Тест"
     {
+        int test_num = (int)v.getTag();
         Intent intent = new Intent(this, TimeStepCounter.class);
         RunRecord old_run = new RunRecord(175);
+        old_run.SetTesting(test_num);
         intent.putExtra("old_run", old_run);
         startActivity(intent);
     }
 
     void UpdatePage()
     {
+        RunRecord runRecord = new RunRecord();
         GetIDs();
         GetTimings();
         GetDistances();
-        for(int i=0; i<IDs.size()+1; i++)
+        for(int i=0; i<IDs.size()+runRecord.GetTestAmounts(); i++)
         {
             LinearLayout T_LL, B_LL;
             if(i<IDs.size()) {
@@ -160,7 +163,11 @@ public class runs_choice extends Activity {
             }
             else
             {
+                int test_number=i-IDs.size()+1;
+
                 Button btn_RunTest = new Button(this);
+                btn_RunTest.setTag(test_number);
+                btn_RunTest.setText("Тест "+test_number+": "+runRecord.GetTestDescription(test_number));
                 btn_RunTest.setOnClickListener(this::OnClickTest);
                 linearLayout.addView(btn_RunTest);
             }
