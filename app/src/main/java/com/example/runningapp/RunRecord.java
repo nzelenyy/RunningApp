@@ -80,7 +80,7 @@ public class RunRecord implements Serializable {
                 return _current_distance;
             return (_records.get(requested_tick));
         }
-        else return getTestResult(requested_tick);
+        else return GetTestResult(requested_tick);
 
     }
 
@@ -113,7 +113,7 @@ public class RunRecord implements Serializable {
         _is_testing_record=test_num;
     }
 
-    String getTestDescription(int test_num)
+    String GetTestDescription(int test_num)
     {
         switch (test_num){
             case 1:
@@ -125,12 +125,12 @@ public class RunRecord implements Serializable {
         }
     }
 
-    String getTestDescription()
+    String GetTestDescription()
     {
-        return getTestDescription(_is_testing_record);
+        return GetTestDescription(_is_testing_record);
     }
 
-    double getTestResult(int test_num, int requested_tick)
+    double GetTestResult(int test_num, int requested_tick)
     {
         switch (test_num){
             case 1:
@@ -141,7 +141,8 @@ public class RunRecord implements Serializable {
                 return 0.0;
         }
     }
-    double getTestResult(int requested_tick)
+
+    double GetTestResult(int requested_tick)
     {
         switch (_is_testing_record){
             case 1:
@@ -151,5 +152,10 @@ public class RunRecord implements Serializable {
             default:
                 return 0.0;
         }
+    }
+
+    int GetTestAmounts()
+    {
+        return 2;
     }
 }
