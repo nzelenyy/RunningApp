@@ -22,6 +22,7 @@ public class runs_choice extends Activity {
 
     LinearLayout linearLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
