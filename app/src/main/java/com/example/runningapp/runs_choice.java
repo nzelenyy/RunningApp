@@ -32,7 +32,6 @@ public class runs_choice extends Activity {
         IDs = new ArrayList<>();
         Timings = new ArrayList<>();
         Distances = new ArrayList<>();
-
         UpdatePage(); //заполняет массивы и отображает все данные
     }
 
