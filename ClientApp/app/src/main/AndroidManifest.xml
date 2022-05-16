@@ -13,7 +13,8 @@
         <activity
             android:name=".Settings"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".FirstResults"
             android:exported="false"
