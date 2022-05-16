@@ -13,11 +13,11 @@ public class User {
     @ColumnInfo (name = "track_id")
     public int track_id;
 
-    @ColumnInfo(name = "first_name")
-    public int firstName;
+    @ColumnInfo(name = "seconds")
+    public int seconds;
 
-    @ColumnInfo(name = "last_name")
-    public double lastName;
+    @ColumnInfo(name = "distance")
+    public double distance;
 }
 
 

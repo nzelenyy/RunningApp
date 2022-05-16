@@ -14,9 +14,11 @@ public class RunRecord implements Serializable {
     private int _current_steps_amount;
     private int _current_run_steps_amount;
     private double _current_distance;
+    private int _is_testing_record;
 
 
     RunRecord() {
+        _is_testing_record = 0;
         _records = new ArrayList<>();
         _height = 170;
         _current_distance = -(_height) / 400.0 + 0.37;
@@ -27,18 +29,20 @@ public class RunRecord implements Serializable {
 
     RunRecord(ArrayList<Double> new_ArrayList)
     {
+        _is_testing_record=0;
         _records = new_ArrayList;
         _height = 170;
         _current_steps_amount = _records.size();
         _ticks_amount = _records.size();
         _current_run_steps_amount=0;
         if(_ticks_amount==0) _current_distance=0;
-        else _current_distance=(double)_records.get(_ticks_amount-1);
+        else _current_distance=_records.get(_ticks_amount-1);
     }
 
     RunRecord(int height) {
         _records = new ArrayList<>();
         _height = height;
+        _is_testing_record=0;
         _current_distance = -(_height) / 400.0 + 0.37;
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
@@ -53,7 +57,7 @@ public class RunRecord implements Serializable {
         }
         _ticks_amount++;
         _current_run_steps_amount++;
-        _current_distance += -(_height * 0.0065);
+        _current_distance += (_height * 0.0065);
         _records.add(_current_distance);
     }
 
@@ -70,9 +74,13 @@ public class RunRecord implements Serializable {
     }
 
     double GetDistanceOnTick(int requested_tick) {
-        if (requested_tick >= _ticks_amount) //return _current_distance;
-            return _current_distance;
-        return ((double) _records.get(requested_tick));
+
+        if(_is_testing_record==0) {
+            if (requested_tick >= _ticks_amount) //return _current_distance;
+                return _current_distance;
+            return (_records.get(requested_tick));
+        }
+        else return GetTestResult(requested_tick);
 
     }
 
@@ -93,5 +101,61 @@ public class RunRecord implements Serializable {
 
     int GetTicksAmount(){
         return _ticks_amount;
+    }
+
+    void SetTesting()
+    {
+        _is_testing_record=1;
+    }
+
+    void SetTesting(int test_num)
+    {
+        _is_testing_record=test_num;
+    }
+
+    String GetTestDescription(int test_num)
+    {
+        switch (test_num){
+            case 1:
+                return "Standing still";
+            case 2:
+                return "A320 flying";
+            default:
+                return "Test not found";
+        }
+    }
+
+    String GetTestDescription()
+    {
+        return GetTestDescription(_is_testing_record);
+    }
+
+    double GetTestResult(int test_num, int requested_tick)
+    {
+        switch (test_num){
+            case 1:
+                return 0.0;
+            case 2:
+                return (247.2*requested_tick);
+            default:
+                return 0.0;
+        }
+    }
+
+    double GetTestResult(int requested_tick)
+    {
+        switch (_is_testing_record){
+            case 1:
+                return 0.0;
+            case 2:
+                return (247.2*requested_tick);
+            default:
+                return 0.0;
+        }
+    }
+
+    int GetTestAmounts()
+    {
+        return 2;
     }
 }
