@@ -157,7 +157,6 @@ public class RunRecord implements Serializable {
                 return 0.0;
         }
     }
-
     int GetTestAmounts()
     {
         return _tests_amount;
