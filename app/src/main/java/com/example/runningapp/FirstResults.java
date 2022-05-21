@@ -33,7 +33,7 @@ public class FirstResults extends AppCompatActivity {
 
 
 
-        String tv_Distance_text = old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м", tv_Steps_text=old_run.GetCurrentStepCount() + " шагов", tv_Time_text=old_run.GetTicksAmount() + " c";
+        String tv_Distance_text = String.format("%.1f",old_run.GetDistanceOnTick(old_run.GetTicksAmount())) + " м", tv_Steps_text=old_run.GetCurrentStepCount() + " шагов", tv_Time_text=old_run.GetTicksAmount() + " c";
         tv_Distance.setText(tv_Distance_text);
         tv_Steps.setText(tv_Steps_text);
         tv_Time.setText(tv_Time_text);
