@@ -167,7 +167,7 @@ public class runs_choice extends Activity {
 
                 Button btn_RunTest = new Button(this);
                 btn_RunTest.setTag(test_number);
-                btn_RunTest.setText("Тест "+test_number+": "+runRecord.GetTestDescription(test_number));
+                btn_RunTest.setText("Test "+test_number+": "+runRecord.GetTestDescription(test_number));
                 btn_RunTest.setOnClickListener(this::OnClickTest);
                 linearLayout.addView(btn_RunTest);
             }

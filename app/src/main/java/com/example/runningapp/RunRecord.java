@@ -15,6 +15,7 @@ public class RunRecord implements Serializable {
     private int _current_run_steps_amount;
     private double _current_distance;
     private int _is_testing_record;
+    private int _tests_amount;
 
 
     RunRecord() {
@@ -25,6 +26,7 @@ public class RunRecord implements Serializable {
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
+        _tests_amount=2;
     }
 
     RunRecord(ArrayList<Double> new_ArrayList)
@@ -37,6 +39,7 @@ public class RunRecord implements Serializable {
         _current_run_steps_amount=0;
         if(_ticks_amount==0) _current_distance=0;
         else _current_distance=_records.get(_ticks_amount-1);
+        _tests_amount=2;
     }
 
     RunRecord(int height) {
@@ -47,6 +50,7 @@ public class RunRecord implements Serializable {
         _current_run_steps_amount = 0;
         _current_steps_amount = 0;
         _ticks_amount = 0;
+        _tests_amount=2;
     }
 
     void AddRunStep(int new_time) {
@@ -156,6 +160,6 @@ public class RunRecord implements Serializable {
 
     int GetTestAmounts()
     {
-        return 2;
+        return _tests_amount;
     }
 }
