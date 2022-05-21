@@ -12,4 +12,4 @@ We were ✨inspired✨ to create RunningApp after being given the assignment📚
 SDK 24, although SDK 32 is recommended
 
 # Launching
-To launch RunningApp and begin the journey of your life you should download the apk file (you can find it [here](https://github.com/nzelenyy/RunningApp/blob/master/app-debug.apk))
+To launch RunningApp and begin the journey of your life you should download the apk file (you can find it [here](https://github.com/nzelenyy/RunningApp/blob/master/RunningApp.apk))
