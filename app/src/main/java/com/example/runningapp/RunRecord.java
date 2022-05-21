@@ -123,7 +123,7 @@ public class RunRecord implements Serializable {
             case 1:
                 return "Standing still";
             case 2:
-                return "A320 flying";
+                return "Fastest man";
             default:
                 return "Test not found";
         }
@@ -140,7 +140,7 @@ public class RunRecord implements Serializable {
             case 1:
                 return 0.0;
             case 2:
-                return (247.2*requested_tick);
+                return (12.2*requested_tick);
             default:
                 return 0.0;
         }
@@ -152,7 +152,7 @@ public class RunRecord implements Serializable {
             case 1:
                 return 0.0;
             case 2:
-                return (247.2*requested_tick);
+                return (12.2*requested_tick);
             default:
                 return 0.0;
         }
