@@ -15,7 +15,7 @@ public class RunRecord implements Serializable {
     private int _current_run_steps_amount;
     private double _current_distance;
     private int _is_testing_record;
-    private int _tests_amount;
+    private int _tests_amount=2;
 
 
     RunRecord() {
