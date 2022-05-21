@@ -62,7 +62,6 @@ public class FirstResults extends AppCompatActivity {
     }
 
 
-
     private void saveNewDot(int Seconds, double Distance, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
