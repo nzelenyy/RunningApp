@@ -3,7 +3,9 @@ package com.example.runningapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -39,12 +41,18 @@ public class TimeStepCounter extends AppCompatActivity{
 
     int pb_amount = 2;// Константа количества одновременных забегов
 
+    private SharedPreferences sharedPrefs;
+    SharedPreferences.Editor ed;
+
+    public static final String PREF = "myprefs";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_time_step_counter);
 
-        int height = getIntent().getIntExtra("height", 170);// считали рост
+        sharedPrefs = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+        int height = sharedPrefs.getInt("height", 170);
 
         currentRun = new RunRecord(height); //Вызвали конструктор текущего забега.
 
@@ -77,7 +85,7 @@ public class TimeStepCounter extends AppCompatActivity{
             pb_Array.add(N_Pr);
         }
 
-        tv_Diff.setText((String)(currentRun.GetHeight()+""));
+        //tv_Diff.setText((String)(currentRun.GetHeight()+""));
 
         SensorEventListener stepDetector = new SensorEventListener() {
             @Override
@@ -91,18 +99,23 @@ public class TimeStepCounter extends AppCompatActivity{
                     double Magnitude = Math.sqrt(x_acceleration*x_acceleration + y_acceleration*y_acceleration + z_acceleration*z_acceleration);
                     double MagnitudeDelta = Magnitude - MagnitudePrevious;
                     MagnitudePrevious = Magnitude;// вынести значения в константы
-                    if (MagnitudeDelta > 10) //Сравнили со значением, соответствующему магнитуде шага при беге
+                    sharedPrefs = getSharedPreferences(PREF, Context.MODE_PRIVATE);
+                    int C1 = sharedPrefs.getInt("walking", 1);
+                    int C2 = sharedPrefs.getInt("running", 10);
+                    if (MagnitudeDelta > C1) //Сравнили со значением, соответствующему магнитуде шага при беге
                     {
                         currentRun.AddRunStep((int)seconds);
+                        UpdateTextViews();
+                        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
                     }
-                    else if (MagnitudeDelta > 1) //Сравнили со значением, соответствующему магнитуде шага
+                    else if (MagnitudeDelta > C2) //Сравнили со значением, соответствующему магнитуде шага
                     {
                         currentRun.AddStep((int)seconds);
-                    }
+                        UpdateTextViews();
+                        UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 
-                    UpdateTextViews();
-                    UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
+                    }
                 }
 
             }
@@ -148,6 +161,7 @@ public class TimeStepCounter extends AppCompatActivity{
         btn_Start.setVisibility(View.INVISIBLE);
         btn_Stop.setVisibility(View.VISIBLE);
         btn_Finish.setVisibility(View.VISIBLE);
+        //currentRun.AddStep((int)seconds);
         UpdateTextViews();
         UpdateProgressBars(currentRun.GetDistanceOnTick((int)seconds), prevRun.GetDistanceOnTick((int)seconds), true);
 

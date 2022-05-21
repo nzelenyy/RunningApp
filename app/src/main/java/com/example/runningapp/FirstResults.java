@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.example.runningapp.db.AppDatabase;
 import com.example.runningapp.db.User;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class FirstResults extends AppCompatActivity {
 
@@ -34,56 +32,48 @@ public class FirstResults extends AppCompatActivity {
         old_run = (RunRecord) getIntent().getSerializableExtra("old_run");
 
 
-
-        tv_Distance.setText((String)(old_run.GetDistanceOnTick(old_run.GetTicksAmount()) + " м"));
-        tv_Steps.setText((String)(old_run.GetCurrentStepCount() + " шагов"));
-        tv_Time.setText((String)(old_run.GetTicksAmount() + " c"));
+        String tv_Distance_text = String.format("%.1f",old_run.GetDistanceOnTick(old_run.GetTicksAmount())) + " м", tv_Steps_text=old_run.GetCurrentStepCount() + " шагов", tv_Time_text=old_run.GetTicksAmount() + " c";
+        tv_Distance.setText(tv_Distance_text);
+        tv_Steps.setText(tv_Steps_text);
+        tv_Time.setText(tv_Time_text);
         saveNewTrack(old_run);
-
-
-        //insert savenewtrack
     }
     public void saveNewTrack (RunRecord Record) { //сохраняем новый Track
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
         ArrayList<Double> ArrayForRecord;
-       // int number_of_tracks=1;
         int number_of_tracks=0;
         if (db.userDao().getMaxTrackID()!=null) {
             number_of_tracks = db.userDao().getMaxTrackID() + 1; //узнаем, какой track_id еще не занят
         }
-        //int basic;
         //basic=db.userDao().getMaxTrackID();
         int temp_seconds;
         temp_seconds=0;
         //double temp_distance;
         ArrayForRecord= Record.GetArrayList();
         for (Double i: ArrayForRecord) {
-            saveNewUser(temp_seconds, i, number_of_tracks); //сохраняем в цикле точки
+            saveNewDot(temp_seconds, i, number_of_tracks); //сохраняем в цикле точки
             ++temp_seconds;
         }
     }
 
 
 
-    private void saveNewUser(int firstName, double lastName, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
+    private void saveNewDot(int Seconds, double Distance, int number_of_tracks) { //с помощью этой функции мы сохраняем новую точку (User) в бд
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
 
         User user = new User();
-        user.firstName = firstName;
+        user.seconds = Seconds;
         user.track_id=number_of_tracks;
-        user.lastName = lastName;
+        user.distance = Distance;
         db.userDao().insertUser(user);
-
-       // finish();
-
     }
 
     public void competition (View view) {
-        Intent intent1 = new Intent (this, TimeStepCounter.class);
-        intent1.putExtra("old_run", old_run);
-        intent1.putExtra("height", old_run.GetHeight());
+        Intent intent = new Intent (this, TimeStepCounter.class);
+        intent.putExtra("old_run", old_run);
+        intent.putExtra("height", old_run.GetHeight());
 
-        startActivity(intent1);
+        startActivity(intent);
     }
 
     public void reset (View view) {

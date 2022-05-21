@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.297" />
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/layout/activity_main.xml" value="0.1956521739130435" />
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/layout/activity_runs_choice.xml" value="0.1956521739130435" />
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/layout/rc_single_run_buttons.xml" value="0.1118659420289855" />
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/layout/rc_single_run_text.xml" value="0.1118659420289855" />
+        <entry key="..\:/Projects/RunningApp/app/src/main/res/layout/single_run_report.xml" value="0.1" />
         <entry key="..\:/Projects/RunningAppM/app/src/main/res/layout/activity_first_results.xml" value="0.1" />
         <entry key="..\:/Projects/RunningAppM/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Projects/RunningAppM/app/src/main/res/layout/activity_time_step_counter.xml" value="0.1956521739130435" />
