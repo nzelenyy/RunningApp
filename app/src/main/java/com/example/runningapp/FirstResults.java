@@ -32,7 +32,6 @@ public class FirstResults extends AppCompatActivity {
         old_run = (RunRecord) getIntent().getSerializableExtra("old_run");
 
 
-
         String tv_Distance_text = String.format("%.1f",old_run.GetDistanceOnTick(old_run.GetTicksAmount())) + " м", tv_Steps_text=old_run.GetCurrentStepCount() + " шагов", tv_Time_text=old_run.GetTicksAmount() + " c";
         tv_Distance.setText(tv_Distance_text);
         tv_Steps.setText(tv_Steps_text);
