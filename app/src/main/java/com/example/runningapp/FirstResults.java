@@ -8,9 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.example.runningapp.db.AppDatabase;
 import com.example.runningapp.db.User;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class FirstResults extends AppCompatActivity {
 
@@ -44,12 +42,10 @@ public class FirstResults extends AppCompatActivity {
     public void saveNewTrack (RunRecord Record) { //сохраняем новый Track
         AppDatabase db  = AppDatabase.getDbInstance(this.getApplicationContext());
         ArrayList<Double> ArrayForRecord;
-       // int number_of_tracks=1;
         int number_of_tracks=0;
         if (db.userDao().getMaxTrackID()!=null) {
             number_of_tracks = db.userDao().getMaxTrackID() + 1; //узнаем, какой track_id еще не занят
         }
-        //int basic;
         //basic=db.userDao().getMaxTrackID();
         int temp_seconds;
         temp_seconds=0;
