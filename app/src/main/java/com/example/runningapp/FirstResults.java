@@ -72,6 +72,7 @@ public class FirstResults extends AppCompatActivity {
         db.userDao().insertUser(user);
     }
 
+
     public void competition (View view) {
         Intent intent = new Intent (this, TimeStepCounter.class);
         intent.putExtra("old_run", old_run);
@@ -79,6 +80,7 @@ public class FirstResults extends AppCompatActivity {
 
         startActivity(intent);
     }
+
 
     public void reset (View view) {
         Intent intent = new Intent (this, MainActivity.class);
